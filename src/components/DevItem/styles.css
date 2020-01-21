@@ -48,3 +48,38 @@ li.dev-item a {
 li.dev-item a:hover {
     color: #5a2ea6
 }
+
+/*Container Edit / Del */
+li.dev-item .user-info-button {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    font-size: 13px;
+}
+
+/* Propriedades comuns dos botões */
+li.dev-item .user-info-button button {
+    border: 0;
+    border-radius: 2px;
+    padding: 10px 10px;
+    margin: 5px;
+    cursor: pointer;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.user-info-button .user-info-edit {
+    background: #a4a4a4;
+}
+
+.user-info-button .user-info-edit:hover {
+    background: #757575;
+}
+
+.user-info-button .user-info-del {
+    background: #ff4d4d;
+}
+
+.user-info-button .user-info-del:hover {
+    background: #ff1a1a;
+}
