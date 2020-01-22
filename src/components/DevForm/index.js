@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function DevForm({ handleAddDev, edit , data }) {
+function DevForm({ handleAddDev, handleEditDev, edit , data }) {
 
     const [ latitude , setLatitude ] = useState('');
     const [ longitude, setLongitude ] = useState('');
@@ -28,24 +28,34 @@ function DevForm({ handleAddDev, edit , data }) {
         );
       }, []);
 
+      // Salva dados
       async function handleSubmit(e){
             e.preventDefault();
 
-            await handleAddDev({
-              github_username,
-              techs,
-              latitude,
-              longitude,
-            });
+            // Atualiza dados do desenvolvedor
+            if( edit ) {
+
+              await handleEditDev({
+                github_username: data.github_username ,
+                techs,
+                latitude,
+                longitude,
+              });
+
+            } else {
+            // Inserir dados de um novo desenvolvedor
+              await handleAddDev({
+                github_username ,
+                techs,
+                latitude,
+                longitude,
+              });
+
+            }
 
             setGithub_username('');
             setTechs('');
-      }
-
-      if( edit ) {
-        //setTechs(data.techs.join(', '));
-        console.log(data.techs);
-      }
+      };
 
     return( 
     <form onSubmit={handleSubmit}>
@@ -74,9 +84,7 @@ function DevForm({ handleAddDev, edit , data }) {
                 required 
                 defaultValue={ edit ? data.techs.join(', ') : techs }
                 onChange = { e => setTechs( e.target.value ) }
-
                 autoFocus = { edit }
-                
             />
         </div>
     

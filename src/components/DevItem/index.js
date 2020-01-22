@@ -1,22 +1,7 @@
 import React from 'react';
 import './styles.css';
 
-function DevItem ({ dev , handleEditItem, handleDeleteItem }) {
-
-    // declara edit state
-    //const [edit, setEdit] = useState(false);
-
-    // excluir um cadastro do banco de dados
-    //function handleDeleteItem (id) {}
-
-    // editar um cadastro do desenvolvedor
-    //function handleEditItem (data) {
-    //    setEdit(true);
-    //}
-
-    // salvar dados alterados
-    //function handleSaveItem (data) {}
-
+function DevItem ({ dev , handleEditItem, handleDeleteDev }) {
     return (
         <li className="dev-item">
           <header>
@@ -30,7 +15,7 @@ function DevItem ({ dev , handleEditItem, handleDeleteItem }) {
           <a href={`https://github.com/${dev.github_username}`}>Acessar perfil no github</a>
           <div className="user-info-button">
             <button type="button" className="user-info-edit" onClick={ ()=> handleEditItem(dev) }>Editar</button>
-            <button type="button" className="user-info-del" onClick={ ()=> handleDeleteItem(dev) } >Excluir</button>
+            <button type="button" className="user-info-del" onClick={ ()=> handleDeleteDev(dev) } >Excluir</button>
           </div>
         </li>
       );

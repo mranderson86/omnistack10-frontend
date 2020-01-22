@@ -38,6 +38,7 @@ function App() {
 
   },[]);
 
+  // Adiciona um novo dev no banco de dados
   async function handleAddDev (data) {
     try {
 
@@ -58,9 +59,26 @@ function App() {
 
   }
 
-  function handleDeleteItem(data) {
+  // atualiza os dados do dev no banco de dados
+  async function handleUpdateDev(data) {
+    try {
+      const response = await api.put('/devs', data);
+    }catch( err ) {
+      console.log(err);
+    }
 
-    console.log('Deletar cadastro', data);
+    setEdit(false);
+  }
+
+  // deleta o cadastro do dev no banco de dados
+  async function handleDeleteDev( data ) {
+    try {
+
+       const response = await api.delete('/dev',data);
+
+    }catch( err ) {
+      console.log(err);
+    }
 
   }
 
@@ -68,13 +86,13 @@ function App() {
     <div id="app">
       <aside>
         <strong>{ edit ? 'Atualizar ' : 'Cadastrar '} Desenvolvedor</strong>
-        <DevForm handleAddDev={handleAddDev} edit = { edit } data = { data } />
+        <DevForm handleAddDev = { handleAddDev } handleUpdateDev = { handleUpdateDev } edit = { edit } data = { data } />
       </aside>
 
       <main>
         <ul>
           { 
-            devs.map( dev => <DevItem handleDeleteItem = { handleDeleteItem }  handleEditItem = { handleEditItem }  key={dev._id}  dev ={dev} />) 
+            devs.map( dev => <DevItem handleDeleteDev = { handleDeleteDev }  handleEditItem = { handleEditItem }  key={dev._id}  dev ={dev} />) 
           }
 
         </ul>
