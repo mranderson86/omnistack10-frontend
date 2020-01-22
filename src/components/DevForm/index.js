@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function DevForm({ handleAddDev }) {
+function DevForm({ handleAddDev, edit , data }) {
 
     const [ latitude , setLatitude ] = useState('');
     const [ longitude, setLongitude ] = useState('');
@@ -42,17 +42,28 @@ function DevForm({ handleAddDev }) {
             setTechs('');
       }
 
+      if( edit ) {
+        //setTechs(data.techs.join(', '));
+        console.log(data.techs);
+      }
+
     return( 
     <form onSubmit={handleSubmit}>
         <div className="input-block">
             <label htmlFor="username_github">Usuário do Github</label>
-            <input 
+            
+            {
+              edit ? <label style={{ color: '#7d40e7' }}>{ data.github_username }</label> :
+              <input 
                 name="github_username" 
                 id="username_github" 
                 required 
+                autoFocus
                 value = {github_username}
                 onChange = { e => setGithub_username( e.target.value ) }
-            />
+              />
+            }
+
         </div>
     
         <div className="input-block">
@@ -61,8 +72,11 @@ function DevForm({ handleAddDev }) {
                 name="techs" 
                 id="techs" 
                 required 
-                value={techs}
+                defaultValue={ edit ? data.techs.join(', ') : techs }
                 onChange = { e => setTechs( e.target.value ) }
+
+                autoFocus = { edit }
+                
             />
         </div>
     
@@ -74,7 +88,8 @@ function DevForm({ handleAddDev }) {
                     type="number" 
                     name="latitude" 
                     id="latitude" 
-                    defaultValue={ latitude } 
+                    //defaultValue={ latitude } 
+                    defaultValue = { edit ? data.location.coordinates[1] : latitude }
                     required 
                     onChange = { e => setLatitude(e.target.value) }
                 />
@@ -86,7 +101,7 @@ function DevForm({ handleAddDev }) {
                     type="number" 
                     name="longitude" 
                     id="longitude" 
-                    defaultValue={ longitude }  
+                    defaultValue = { edit ? data.location.coordinates[0] : longitude }  
                     required
                     onChange = { e => setLongitude(e.target.value) }
                 />

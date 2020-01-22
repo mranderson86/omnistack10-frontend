@@ -14,8 +14,12 @@ import './Main.css';
 
 function App() {
 
-  // variável de estado
+  // variáveis de estados
   const [devs , setDevs ] = useState([]);
+
+  const [data, setData] = useState({});
+
+  const [edit,setEdit] = useState(false);
 
   useEffect(() => {
     // consulta todos os devs cadastrados
@@ -35,7 +39,6 @@ function App() {
   },[]);
 
   async function handleAddDev (data) {
-
     try {
 
       const response = await api.post('/devs', data);
@@ -45,19 +48,34 @@ function App() {
     } catch(err) {
       console.log(err);
     }
-}
+  }
+
+  function handleEditItem(data) {
+
+    console.log('Alterar cadastro', data);
+    setEdit(true);
+    setData(data);
+
+  }
+
+  function handleDeleteItem(data) {
+
+    console.log('Deletar cadastro', data);
+
+  }
 
   return (
     <div id="app">
       <aside>
-        <strong>Cadastrar</strong>
-        <DevForm handleAddDev={handleAddDev} />
+        <strong>{ edit ? 'Atualizar ' : 'Cadastrar '} Desenvolvedor</strong>
+        <DevForm handleAddDev={handleAddDev} edit = { edit } data = { data } />
       </aside>
 
       <main>
         <ul>
-
-          { devs.map( dev => <DevItem key={dev._id}  dev ={dev} />) }
+          { 
+            devs.map( dev => <DevItem handleDeleteItem = { handleDeleteItem }  handleEditItem = { handleEditItem }  key={dev._id}  dev ={dev} />) 
+          }
 
         </ul>
       </main>
