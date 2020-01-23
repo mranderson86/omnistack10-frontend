@@ -38,6 +38,7 @@ function App() {
 
   },[]);
 
+
   // Adiciona um novo dev no banco de dados
   async function handleAddDev (data) {
     try {
@@ -53,7 +54,9 @@ function App() {
 
   function handleEditItem(data) {
 
-    console.log('Alterar cadastro', data);
+    const newDevs = devs.filter(dev => dev.github_username !== data.github_username);
+
+    setDevs(newDevs);
     setEdit(true);
     setData(data);
 
@@ -62,19 +65,31 @@ function App() {
   // atualiza os dados do dev no banco de dados
   async function handleUpdateDev(data) {
     try {
+
+      // devolve uma lista atualizada de devs
       const response = await api.put('/devs', data);
+
+      setEdit(false);
+      setDevs(response.data);
+
     }catch( err ) {
       console.log(err);
     }
 
-    setEdit(false);
   }
 
   // deleta o cadastro do dev no banco de dados
-  async function handleDeleteDev( data ) {
+  async function handleDeleteDev( { github_username } ) {
     try {
 
-       const response = await api.delete('/dev',data);
+      // devolve uma lista atualizada de devs.
+      const response = await api.delete('/devs',{
+          params: {
+            github_username
+          }
+      });
+
+      setDevs(response.data);
 
     }catch( err ) {
       console.log(err);

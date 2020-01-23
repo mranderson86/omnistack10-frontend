@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function DevForm({ handleAddDev, handleEditDev, edit , data }) {
+function DevForm({ handleAddDev, handleUpdateDev, edit , data }) {
 
     const [ latitude , setLatitude ] = useState('');
     const [ longitude, setLongitude ] = useState('');
@@ -9,6 +9,7 @@ function DevForm({ handleAddDev, handleEditDev, edit , data }) {
     const [ techs , setTechs ] = useState('');
 
     useEffect(() => {
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
           
@@ -35,7 +36,7 @@ function DevForm({ handleAddDev, handleEditDev, edit , data }) {
             // Atualiza dados do desenvolvedor
             if( edit ) {
 
-              await handleEditDev({
+              await handleUpdateDev({
                 github_username: data.github_username ,
                 techs,
                 latitude,
@@ -55,7 +56,11 @@ function DevForm({ handleAddDev, handleEditDev, edit , data }) {
 
             setGithub_username('');
             setTechs('');
+
+            edit = false;
       };
+
+      console.log(techs);
 
     return( 
     <form onSubmit={handleSubmit}>
@@ -82,7 +87,7 @@ function DevForm({ handleAddDev, handleEditDev, edit , data }) {
                 name="techs" 
                 id="techs" 
                 required 
-                defaultValue={ edit ? data.techs.join(', ') : techs }
+                defaultValue = { edit ? data.techs.join(', ') : techs }
                 onChange = { e => setTechs( e.target.value ) }
                 autoFocus = { edit }
             />
@@ -95,8 +100,7 @@ function DevForm({ handleAddDev, handleEditDev, edit , data }) {
                 <input 
                     type="number" 
                     name="latitude" 
-                    id="latitude" 
-                    //defaultValue={ latitude } 
+                    id="latitude"
                     defaultValue = { edit ? data.location.coordinates[1] : latitude }
                     required 
                     onChange = { e => setLatitude(e.target.value) }
