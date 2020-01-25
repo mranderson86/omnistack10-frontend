@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-function DevForm({ handleAddDev, handleUpdateDev, edit , data }) {
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-    const [ latitude , setLatitude ] = useState('');
-    const [ longitude, setLongitude ] = useState('');
+import "./styles.css";
 
-    const [ github_username , setGithub_username ] = useState('');
-    const [ techs , setTechs ] = useState('');
+function DevForm({ handleAddDev, 
+    handleUpdateDev, 
+    edit = false , 
+    data
+  }) {
+
+    const [ github_username , setGithub_username ] = useState(edit ? data.github_username : '');
+    const [ techs , setTechs ] = useState(edit ? data.techs : '');
+
+    const [ latitude , setLatitude ] = useState(edit ? data.location.coordinates[1] : '');
+    const [ longitude, setLongitude ] = useState(edit ? data.location.coordinates[0] : '');
+
+    const [ show , setShow ] = useState(false);
 
     useEffect(() => {
 
@@ -33,6 +44,8 @@ function DevForm({ handleAddDev, handleUpdateDev, edit , data }) {
       async function handleSubmit(e){
             e.preventDefault();
 
+            setShow(true);
+
             // Atualiza dados do desenvolvedor
             if( edit ) {
 
@@ -54,13 +67,15 @@ function DevForm({ handleAddDev, handleUpdateDev, edit , data }) {
 
             }
 
+            data.techs = '';
+
             setGithub_username('');
             setTechs('');
-
+            setShow(false);
             edit = false;
-      };
 
-      console.log(techs);
+            
+      };
 
     return( 
     <form onSubmit={handleSubmit}>
@@ -122,6 +137,18 @@ function DevForm({ handleAddDev, handleUpdateDev, edit , data }) {
         </div>
 
         <button type='submit'>Salvar</button>
+
+        <div className="spinner">
+          { show ?
+            <Loader 
+              type="Oval"
+              color="#7d40e7"
+              width={50}
+              height={50}
+            /> : ''
+          }
+        </div>
+        
     </form>
     )
 }
