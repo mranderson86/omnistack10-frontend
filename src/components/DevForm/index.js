@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-<<<<<<< HEAD
-function DevForm({ handleAddDev }) {
-=======
 import Loader from 'react-loader-spinner';
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
->>>>>>> development
-
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import "./styles.css";
 
 function DevForm({ handleAddDev, 
@@ -48,51 +42,43 @@ function DevForm({ handleAddDev,
       async function handleSubmit(e){
             e.preventDefault();
 
-<<<<<<< HEAD
-=======
             setShow(true);
 
-            // Atualiza dados do desenvolvedor
-            if( edit ) {
-
-              await handleUpdateDev({
-                github_username: data.github_username ,
+            if(edit) {
+              // Atualiza dados de desenvolvedor
+              handleUpdateDev({
+                github_username : data.github_username ,
                 techs,
                 latitude,
                 longitude,
-              });
+              })
 
-            } else {
->>>>>>> development
-            // Inserir dados de um novo desenvolvedor
-            await handleAddDev({
+            }else{
+              // Inserir dados de um novo desenvolvedor
+              await handleAddDev({
                 github_username ,
                 techs,
                 latitude,
                 longitude,
-            });
+              });
+            }
 
             data.techs = '';
-
-            setGithub_username('');
-<<<<<<< HEAD
-            setTechs('');    
-      };
-
-=======
-            setTechs('');
-            setShow(false);
             edit = false;
 
+            setGithub_username('');
+            setTechs('');
             
+            setShow(false);
+
       };
 
->>>>>>> development
     return( 
     <form onSubmit={handleSubmit}>
+        
         <div className="input-block">
             <label htmlFor="username_github">Usuário do Github</label>
-              
+            { edit ? <label style={ { color: "#7d40e7", fontWeight: 'bold' } }>{data.github_username}</label> :
               <input 
                 name="github_username" 
                 id="username_github" 
@@ -101,16 +87,16 @@ function DevForm({ handleAddDev,
                 value = {github_username}
                 onChange = { e => setGithub_username( e.target.value ) }
               />
-            
+            }
         </div>
-    
+        
         <div className="input-block">
             <label htmlFor="techs">Tecnologias</label>
             <input 
                 name="techs" 
                 id="techs" 
                 required 
-                defaultValue = { techs }
+                defaultValue = { edit ? data.techs :  techs }
                 onChange = { e => setTechs( e.target.value ) }
             />
         </div>
@@ -123,7 +109,7 @@ function DevForm({ handleAddDev,
                     type="number" 
                     name="latitude" 
                     id="latitude"
-                    defaultValue = { latitude }
+                    defaultValue = { edit ? data.location.coordinates[1] : latitude }
                     required 
                     onChange = { e => setLatitude(e.target.value) }
                 />
@@ -135,7 +121,7 @@ function DevForm({ handleAddDev,
                     type="number" 
                     name="longitude" 
                     id="longitude" 
-                    defaultValue = { longitude }  
+                    defaultValue = { edit ? data.location.coordinates[0] :  longitude }  
                     required
                     onChange = { e => setLongitude(e.target.value) }
                 />
