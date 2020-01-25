@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
+<<<<<<< HEAD
 function DevForm({ handleAddDev }) {
+=======
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+>>>>>>> development
 
-    const [ latitude , setLatitude ] = useState('');
-    const [ longitude, setLongitude ] = useState('');
+import "./styles.css";
 
-    const [ github_username , setGithub_username ] = useState('');
-    const [ techs , setTechs ] = useState('');
+function DevForm({ handleAddDev, 
+    handleUpdateDev, 
+    edit = false , 
+    data
+  }) {
+
+    const [ github_username , setGithub_username ] = useState(edit ? data.github_username : '');
+    const [ techs , setTechs ] = useState(edit ? data.techs : '');
+
+    const [ latitude , setLatitude ] = useState(edit ? data.location.coordinates[1] : '');
+    const [ longitude, setLongitude ] = useState(edit ? data.location.coordinates[0] : '');
+
+    const [ show , setShow ] = useState(false);
 
     useEffect(() => {
 
@@ -33,6 +48,22 @@ function DevForm({ handleAddDev }) {
       async function handleSubmit(e){
             e.preventDefault();
 
+<<<<<<< HEAD
+=======
+            setShow(true);
+
+            // Atualiza dados do desenvolvedor
+            if( edit ) {
+
+              await handleUpdateDev({
+                github_username: data.github_username ,
+                techs,
+                latitude,
+                longitude,
+              });
+
+            } else {
+>>>>>>> development
             // Inserir dados de um novo desenvolvedor
             await handleAddDev({
                 github_username ,
@@ -41,10 +72,22 @@ function DevForm({ handleAddDev }) {
                 longitude,
             });
 
+            data.techs = '';
+
             setGithub_username('');
+<<<<<<< HEAD
             setTechs('');    
       };
 
+=======
+            setTechs('');
+            setShow(false);
+            edit = false;
+
+            
+      };
+
+>>>>>>> development
     return( 
     <form onSubmit={handleSubmit}>
         <div className="input-block">
@@ -101,6 +144,18 @@ function DevForm({ handleAddDev }) {
         </div>
 
         <button type='submit'>Salvar</button>
+
+        <div className="spinner">
+          { show ?
+            <Loader 
+              type="Oval"
+              color="#7d40e7"
+              width={50}
+              height={50}
+            /> : ''
+          }
+        </div>
+        
     </form>
     )
 }

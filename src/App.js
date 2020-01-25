@@ -14,7 +14,11 @@ import './Main.css';
 function App() {
 
   // variáveis de estados
+<<<<<<< HEAD
   const [devs, setDevs ] = useState([]);
+=======
+  const [devs , setDevs ] = useState([]);
+>>>>>>> development
   const [data, setData] = useState({});
   const [edit,setEdit] = useState(false);
 
@@ -67,7 +71,12 @@ function App() {
       // devolve uma lista atualizada de devs
       await api.put('/devs', data);
 
+<<<<<<< HEAD
       // consulta os dados atualiazados
+=======
+      setEdit(false);
+      //setDevs(response.data);
+>>>>>>> development
       const response = await api.get('/devs');
       setDevs(response.data);
       setEdit(false);
@@ -83,14 +92,22 @@ function App() {
   async function handleDeleteDev( { github_username } ) {
     try {
 
+<<<<<<< HEAD
       // devolve uma lista atualizada de devs.
+=======
+>>>>>>> development
       await api.delete('/devs',{
           params: {
             github_username
           }
       });
 
+<<<<<<< HEAD
 
+=======
+      //setDevs(response.data);
+      // devolve uma lista atualizada de devs.  
+>>>>>>> development
       const response = await api.get('/devs');
       setDevs(response.data);
 
@@ -101,6 +118,7 @@ function App() {
   }
 
   return (
+    <>
     <div id="app">
       <aside>
         <strong>{ edit ? 'Atualizar ' : 'Cadastrar '} Desenvolvedor</strong>
@@ -122,6 +140,7 @@ function App() {
       </main>
 
     </div>
+    </>
   );
 }
 
