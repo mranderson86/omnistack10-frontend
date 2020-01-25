@@ -4,21 +4,18 @@ import api from './services/api';
 
 import DevItem from './components/DevItem';
 import DevForm from './components/DevForm';
+import DevFormEdit from './components/DevFormEdit';
 
 import './global.css';
 import './App.css';
 import './Sidebar.css';
 import './Main.css';
 
-//import avatar from './logo192.png';
-
 function App() {
 
   // variáveis de estados
-  const [devs , setDevs ] = useState([]);
-
+  const [devs, setDevs ] = useState([]);
   const [data, setData] = useState({});
-
   const [edit,setEdit] = useState(false);
 
   useEffect(() => {
@@ -54,11 +51,12 @@ function App() {
 
   function handleEditItem(data) {
 
+    // Removendo o usuário editado da lista
     const newDevs = devs.filter(dev => dev.github_username !== data.github_username);
 
+    setData(data);
     setDevs(newDevs);
     setEdit(true);
-    setData(data);
 
   }
 
@@ -67,10 +65,13 @@ function App() {
     try {
 
       // devolve uma lista atualizada de devs
-      const response = await api.put('/devs', data);
+      await api.put('/devs', data);
 
-      setEdit(false);
+      // consulta os dados atualiazados
+      const response = await api.get('/devs');
       setDevs(response.data);
+      setEdit(false);
+      
 
     }catch( err ) {
       console.log(err);
@@ -83,12 +84,14 @@ function App() {
     try {
 
       // devolve uma lista atualizada de devs.
-      const response = await api.delete('/devs',{
+      await api.delete('/devs',{
           params: {
             github_username
           }
       });
 
+
+      const response = await api.get('/devs');
       setDevs(response.data);
 
     }catch( err ) {
@@ -101,13 +104,18 @@ function App() {
     <div id="app">
       <aside>
         <strong>{ edit ? 'Atualizar ' : 'Cadastrar '} Desenvolvedor</strong>
-        <DevForm handleAddDev = { handleAddDev } handleUpdateDev = { handleUpdateDev } edit = { edit } data = { data } />
+        {
+          edit ? <DevFormEdit handleUpdateDev = { handleUpdateDev } data = { data } /> :
+                 <DevForm handleAddDev = { handleAddDev } />
+        }
       </aside>
 
       <main>
         <ul>
           { 
-            devs.map( dev => <DevItem handleDeleteDev = { handleDeleteDev }  handleEditItem = { handleEditItem }  key={dev._id}  dev ={dev} />) 
+          
+            devs.map( dev => <DevItem handleDeleteDev = { handleDeleteDev }  handleEditItem = { handleEditItem }  key={dev._id}  dev ={dev} />)
+
           }
 
         </ul>

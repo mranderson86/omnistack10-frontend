@@ -1,64 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-function DevForm({ handleAddDev }) {
+function DevFormEdit({ handleUpdateDev, data }) {
 
-    const [ latitude , setLatitude ] = useState('');
-    const [ longitude, setLongitude ] = useState('');
+    const [ latitude , setLatitude ] = useState(data.location.coordinates[1]);
+    const [ longitude, setLongitude ] = useState(data.location.coordinates[0]);
 
-    const [ github_username , setGithub_username ] = useState('');
-    const [ techs , setTechs ] = useState('');
-
-    useEffect(() => {
-
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-          
-            const { latitude , longitude } = position.coords;
-    
-            setLatitude(latitude);
-            setLongitude(longitude);
-    
-          }, 
-          (err) => {
-            console.log(err);
-          },
-          {
-            timeout: 30000,
-          }
-          
-        );
-      }, []);
+    const [ github_username,setGithub_username ] = useState(data.github_username);
+    const [ techs , setTechs ] = useState(data.techs);
 
       // Salva dados
       async function handleSubmit(e){
             e.preventDefault();
 
-            // Inserir dados de um novo desenvolvedor
-            await handleAddDev({
-                github_username ,
-                techs,
-                latitude,
-                longitude,
+            // Atualiza dados do desenvolvedor
+            await handleUpdateDev({
+                 github_username ,
+                 techs,
+                 latitude,
+                 longitude
             });
 
+            setTechs('');
             setGithub_username('');
-            setTechs('');    
+                
       };
 
     return( 
     <form onSubmit={handleSubmit}>
         <div className="input-block">
             <label htmlFor="username_github">Usuário do Github</label>
-              
-              <input 
-                name="github_username" 
-                id="username_github" 
-                required 
-                autoFocus
-                value = {github_username}
-                onChange = { e => setGithub_username( e.target.value ) }
-              />
-            
+            <label style={{ color: '#7d40e7', height: '32px' }}>{ data.github_username }</label>
         </div>
     
         <div className="input-block">
@@ -67,8 +38,9 @@ function DevForm({ handleAddDev }) {
                 name="techs" 
                 id="techs" 
                 required 
-                defaultValue = { techs }
+                defaultValue = { data.techs.join(', ') }
                 onChange = { e => setTechs( e.target.value ) }
+                autoFocus
             />
         </div>
     
@@ -80,7 +52,7 @@ function DevForm({ handleAddDev }) {
                     type="number" 
                     name="latitude" 
                     id="latitude"
-                    defaultValue = { latitude }
+                    defaultValue = { data.location.coordinates[1] }
                     required 
                     onChange = { e => setLatitude(e.target.value) }
                 />
@@ -92,7 +64,7 @@ function DevForm({ handleAddDev }) {
                     type="number" 
                     name="longitude" 
                     id="longitude" 
-                    defaultValue = { longitude }  
+                    defaultValue = { data.location.coordinates[0] }  
                     required
                     onChange = { e => setLongitude(e.target.value) }
                 />
@@ -105,4 +77,4 @@ function DevForm({ handleAddDev }) {
     )
 }
 
-export default DevForm;
+export default DevFormEdit;
